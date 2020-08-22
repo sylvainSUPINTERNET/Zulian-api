@@ -10,8 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Path("/api/folder")
 public class FolderResource {
@@ -29,6 +28,9 @@ public class FolderResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response test() {
-        return Response.status(Response.Status.OK).entity(folderService.testFolderService()).build();
+        return Response
+                .status(Response.Status.OK)
+                .entity(folderService.testFolderService())
+                .build();
     }
 }
