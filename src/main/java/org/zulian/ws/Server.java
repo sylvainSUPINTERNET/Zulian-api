@@ -21,6 +21,7 @@ public class Server {
         sessions.put(username, session);
         broadcast("User " + username + " joined");
         System.out.println("user has joined : " + username);
+        System.out.println(session.getId());
     }
 
     @OnClose
