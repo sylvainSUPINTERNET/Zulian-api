@@ -4,7 +4,9 @@ package org.zulian.resources;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.zulian.services.FolderService;
 
+import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,7 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
-
+@RequestScoped
 @Path("/api/folder")
 public class FolderResource {
 
@@ -25,6 +27,13 @@ public class FolderResource {
     @Inject
     JsonWebToken jwt;
 
+
+    @GET
+    @PermitAll
+    @Produces(MediaType.TEXT_PLAIN)
+    public String ee(@Context SecurityContext ctx) {
+        return "hello";
+    }
 
     @GET
     @RolesAllowed({"User","Admin"})

@@ -1,7 +1,9 @@
 mp:
   jwt:
     verify:
-      issuer: https://quarkus.io/using-jwt-rbac
+      # Parameters here must match in GeneratToken service else the token is not valid
+      issuer: https://zg-api # Becarefull if you change this value, the JWT are not valid anymore if the issuer at generate is not same
+      aud: zg-api
       publickey:
         location: META-INF/resources/publicKey.pem
 quarkus:
@@ -22,4 +24,6 @@ smallrye:
   jwt:
     sign:
       key-location: META-INF/resources/privateKey.pem
+
+
 
