@@ -1,0 +1,25 @@
+mp:
+  jwt:
+    verify:
+      issuer: https://quarkus.io/using-jwt-rbac
+      publickey:
+        location: META-INF/resources/publicKey.pem
+quarkus:
+  datasource:
+    db-kind: postgresql
+    jdbc:
+      max-size: 16
+      min-size: 4
+      url: jdbc:postgresql://localhost:5432/zulian
+    password: root
+    username: root
+  hibernate-orm:
+    database:
+      generation: update
+  http:
+    port: 5200
+smallrye:
+  jwt:
+    sign:
+      key-location: META-INF/resources/privateKey.pem
+
