@@ -29,6 +29,8 @@ public class GenerateToken {
     @Inject
     JWTParser parser;
 
+
+
     @GET
     @Path("token")
     @Produces(MediaType.APPLICATION_JSON)
