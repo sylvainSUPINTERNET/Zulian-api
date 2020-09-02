@@ -29,6 +29,8 @@ public class GenerateToken {
     @Inject
     JWTParser parser;
 
+    @Inject
+    RoleImpl roleImpl;
 
 
     @GET
