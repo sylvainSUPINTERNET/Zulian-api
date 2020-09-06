@@ -20,10 +20,11 @@ quarkus:
       generation: update
   http:
     port: 5200
+  swagger-ui:
+    path: /api/v1/doc
+    always-include: true
+
 smallrye:
   jwt:
     sign:
       key-location: META-INF/resources/privateKey.pem
-
-
-

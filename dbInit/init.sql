@@ -1,1 +1,2 @@
-create table zulian(id int);
+CREATE EXTENSION postgis;
+SELECT postgis_full_version();

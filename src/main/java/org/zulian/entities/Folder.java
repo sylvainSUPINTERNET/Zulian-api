@@ -7,12 +7,13 @@ import javax.persistence.Id;
 
 @Entity
 public class Folder {
-    private Long id;
     private String name;
     private String description;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="folderSeq")
+    private Long id;
+
 
     public String getDescription() {
         return description;

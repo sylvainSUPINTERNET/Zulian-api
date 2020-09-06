@@ -38,6 +38,7 @@ public class GenerateToken {
     @Produces(MediaType.APPLICATION_JSON)
     public String getToken(){
 
+
         long nowMillis = System.currentTimeMillis();
         long exp = nowMillis + 86400000; // 24h
 
@@ -50,7 +51,8 @@ public class GenerateToken {
         claimMap.put("sub", "jwt-rbac");
         claimMap.put("jti", UUID.randomUUID().toString());
         claimMap.put("upn", "sylvainneung@zg-api");
-        claimMap.put("groups", new HashSet<>(Arrays.asList("User", "Admin")));
+        //claimMap.put("groups", new HashSet<>(Arrays.asList("User", "Admin")));
+        claimMap.put("groups", "User");
         claimMap.put("raw_token", UUID.randomUUID().toString());
 
         // TODO
