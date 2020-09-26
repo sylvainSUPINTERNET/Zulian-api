@@ -1,2 +1,3 @@
-CREATE EXTENSION postgis;
-SELECT postgis_full_version();
+CREATE EXTENSION postgis; -- make sure you using postgis valid image into your docker compose --
+
+CREATE DATABASE "zg-map";

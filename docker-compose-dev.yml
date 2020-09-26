@@ -4,7 +4,7 @@ services:
 
   db:
     container_name: zuliandb
-    image: postgres
+    image: mdillon/postgis
     restart: always
     environment:
       POSTGRES_PASSWORD: root
@@ -12,6 +12,17 @@ services:
       POSTGRES_DB: zulian
     ports:
       - 5432:5432
+    volumes:
+      - ./dbInit/init.sql:/docker-entrypoint-initdb.d/init.sql
+  #osrm:
+    #container_name: osrm
+    #image: osrm/osrm-backend
+    #restart: always
+    #ports:
+      #- "5000:5000"
+    #volumes:
+      #- ./osrm:/data
+    #command: "osrm-routed --max-matching-size 1000 --max-table-size 1000 --max-viaroute-size 1000 --algorithm mld /data/map.osrm"
 
     #volumes:
       #- ./dbInit/init.sql:/docker-entrypoint-initdb.d/init.sql
