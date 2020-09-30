@@ -11,11 +11,13 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import java.util.*;
 
@@ -36,7 +38,7 @@ public class GenerateToken {
     @GET
     @Path("token")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getToken(){
+    public Response getToken(){
 
 
         long nowMillis = System.currentTimeMillis();
@@ -60,7 +62,15 @@ public class GenerateToken {
         //DefaultJWTCallerPrincipal{id='25c60e2a-d3b7-49b6-ad7a-a0f0bb9d7fc6', name='sylvainneung@zg-api', expiration=1598794424386, notBefore=0, issuedAt=1598708024, issuer='https://zg-api', audience=[zg-api], subject='jwt-rbac', type='JWT', issuedFor='null', authTime=0, givenName='null', familyName='null', middleName='null', nickName='null', preferredUsername='null', email='null', emailVerified=null, allowedOrigins=null, updatedAt=0, acr='null', groups=[User,Admin]}
 
 
-        return Jwt.claims(claimMap).sign();
+        // https://dzone.com/articles/how-to-use-cookies-in-spring-boo
+
+        Map<String, String> resp = new HashMap<>();
+        resp.put("access_token", Jwt.claims(claimMap).sign());
+
+        NewCookie cookie = new NewCookie("zg-access-token", Jwt.claims(claimMap).sign(), "/", "",
+                "ZG session", 86400, false, true); // 86400 -> 24h in seconds
+
+        return Response.status(200).entity(resp).cookie(cookie).build();
     }
 
 

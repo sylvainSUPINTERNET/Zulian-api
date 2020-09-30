@@ -6,6 +6,8 @@ mp:
       aud: zg-api
       publickey:
         location: META-INF/resources/publicKey.pem
+uarkus:
+
 quarkus:
   datasource:
     db-kind: postgresql
@@ -19,7 +21,9 @@ quarkus:
     database:
       generation: update
   http:
-    port: 5200
+    port: 9999
+    cors: true
+
   swagger-ui:
     path: /api/v1/doc
     always-include: true

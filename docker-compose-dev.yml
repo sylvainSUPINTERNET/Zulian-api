@@ -1,7 +1,6 @@
 version: '3.1'
 
 services:
-
   db:
     container_name: zuliandb
     image: mdillon/postgis
@@ -13,7 +12,53 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./dbInit/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./dbInit/init-map.sql:/docker-entrypoint-initdb.d/init-map.sql
+  app:
+    container_name: "app"
+    build:
+      context: ../tiger
+      dockerfile: Dockerfile
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ../tiger/:/app
+    stdin_open: true # docker run -i
+  nginx:
+    container_name: proxy
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 4200:4200
+      - 433:433
+    depends_on:
+      - api
+  api:
+    container_name: api
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - 9999:9999 # same as ports above, the api is accessible at 127.0.0.1:4999 (for postman)
+  api-map:
+    container_name: api-map
+    depends_on:
+      - db
+    environment:
+      - PORT=4999
+      - HOST=0.0.0.0
+    ports:
+      - 4999:4999
+    build:
+      context: ../zg-map/
+      dockerfile: Dockerfile
+    restart: always
   #osrm:
     #container_name: osrm
     #image: osrm/osrm-backend
@@ -25,4 +70,4 @@ services:
     #command: "osrm-routed --max-matching-size 1000 --max-table-size 1000 --max-viaroute-size 1000 --algorithm mld /data/map.osrm"
 
     #volumes:
-      #- ./dbInit/init.sql:/docker-entrypoint-initdb.d/init.sql
+      #- ./dbInit/init-map.sql:/docker-entrypoint-initdb.d/init-map.sql
