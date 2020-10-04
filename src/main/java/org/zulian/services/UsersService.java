@@ -15,6 +15,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import javax.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class UsersService {
     UsersService(){}
 
     @Transactional
-    public Map<Object, Object> createUser(UserCreateDto userCreateDto){
+    public Response createUser(UserCreateDto userCreateDto){
         HashMap<Object, Object> resp = new HashMap<>();
 
 
@@ -39,7 +40,10 @@ public class UsersService {
             if (usersRepository.findByEmail(userCreateDto.getEmail()) != null) {
                 resp.put("message", "This email is already taken.");
                 resp.put("error", "User already exists");
-                return resp;
+                return Response
+                        .status(Response.Status.BAD_REQUEST)
+                        .entity(resp)
+                        .build();
             }
 
 
@@ -52,18 +56,27 @@ public class UsersService {
 
                 resp.put("message", userNew);
                 resp.put("success", "User created with success");
-                return resp;
+                return Response
+                        .status(Response.Status.OK)
+                        .entity(resp)
+                        .build();
             } catch (PersistenceException pe) {
                 resp.put("message", pe.getMessage());
                 resp.put("error", pe.toString());
-                return resp;
+                return Response
+                        .status(Response.Status.BAD_REQUEST)
+                        .entity(resp)
+                        .build();
             }
 
 
         } catch (Exception e) {
             resp.put("message", e.getMessage());
             resp.put("error", e.toString());
-            return resp;
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(resp)
+                    .build();
         }
 
     }

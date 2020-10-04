@@ -23,18 +23,11 @@ public class UsersResource {
     @Inject
     UsersService usersService;
 
-    @Inject
-    UserCreateDto userCreateDto;
-
-
     @POST
     @PermitAll
     @Produces(MediaType.APPLICATION_JSON)
     @Tag(name = "Users", description = "CRUD Services for Users entity", externalDocs = @ExternalDocumentation(description = "Users CRUD endpoints"))
     public Response createUser(@Context SecurityContext ctx, UserCreateDto userCreateDto) {
-        return Response
-                .status(Response.Status.OK)
-                .entity(usersService.createUser(userCreateDto))
-                .build();
+        return usersService.createUser(userCreateDto);
     }
 }
