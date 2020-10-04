@@ -1,5 +1,7 @@
 package org.zulian.entities;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class Users {
     String password;
     String email;
     String phoneNumber;
+
 
     public long getId() {
         return id;
