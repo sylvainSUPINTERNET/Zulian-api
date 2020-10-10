@@ -7,6 +7,7 @@ import io.smallrye.jwt.build.Jwt;
 import org.jose4j.json.internal.json_simple.JSONArray;
 import org.jose4j.json.internal.json_simple.JSONObject;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.zulian.DTO.ErrorDto;
 import org.zulian.DTO.UserCreateDto;
@@ -145,10 +146,8 @@ public class UsersService {
             NewCookie cookie = new NewCookie("zg-access-token", Jwt.claims(claimMap).sign(), "/", "",
                     "ZG session", 86400, false, true); // 86400 -> 24h in seconds
 
-            return Response
-                    .status(Response.Status.OK)
-                    .entity(resp)
-                    .build();
+            return Response.status(Response.Status.OK).entity(resp).cookie(cookie).build();
+
 
         } catch (Exception e) {
             resp.put("message", "Une erreur est surevenue");

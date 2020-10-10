@@ -27,7 +27,7 @@ import java.util.*;
 
 
 @RequestScoped
-@Path("/api/auth")
+@Path("/api/v1/auth")
 public class GenerateToken {
 
     @Inject
