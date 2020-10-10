@@ -1,8 +1,11 @@
 package org.zulian.entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Users {
@@ -14,6 +17,12 @@ public class Users {
     String password;
     String email;
     String phoneNumber;
+    boolean active;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 
     public long getId() {
@@ -64,5 +73,12 @@ public class Users {
         this.phoneNumber = phoneNumber;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
 

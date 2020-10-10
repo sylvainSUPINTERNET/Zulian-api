@@ -8,14 +8,16 @@ import io.smallrye.jwt.build.JwtClaimsBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.zulian.DTO.UserLoginDto;
+import org.zulian.services.UsersService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -29,11 +31,20 @@ import java.util.*;
 public class GenerateToken {
 
     @Inject
+    UsersService usersService;
+
+    @Inject
     JWTParser parser;
 
     @Inject
     RoleImpl roleImpl;
 
+    @POST
+    @Path("token")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response responseEntity(@RequestBody UserLoginDto userLoginDto) {
+        return usersService.loginUser(userLoginDto);
+    }
 
     @GET
     @Path("token")

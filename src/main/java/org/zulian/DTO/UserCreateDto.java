@@ -11,6 +11,7 @@ public class UserCreateDto {
     String email;
     String password;
     String phoneNumber;
+    boolean ative;
 
     public String getFirstName() {
         return firstName;
@@ -51,4 +52,13 @@ public class UserCreateDto {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    public boolean isAtive() {
+        return ative;
+    }
+
+    public void setAtive(boolean ative) {
+        this.ative = ative;
+    }
 }
+
