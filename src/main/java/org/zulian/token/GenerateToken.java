@@ -8,7 +8,9 @@ import io.smallrye.jwt.build.JwtClaimsBuilder;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.zulian.DTO.UserLoginDto;
@@ -18,10 +20,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.*;
+
 
 
 
@@ -85,7 +86,49 @@ public class GenerateToken {
     }
 
 
+    @GET
+    @Path("verify/{role}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verify(@Context HttpHeaders headers, @PathParam(value = "role") String role){
+        Map<String, Object> resp = new HashMap<>();
 
+        if ( headers.getCookies().get("zg-access-token") == null) {
+            resp.put("message", "No access token provided");
+            resp.put("error", true);
+            return Response.status(Response.Status.FORBIDDEN).entity(resp).build();
+        } else {
+
+            try {
+                JsonWebToken jwt = parser.parse(headers.getCookies().get("zg-access-token").getValue());
+                // TODO -> compare with role given if its in groups
+                System.out.println("GROUPS FoUND");
+                System.out.println(jwt.getGroups());
+                boolean hasRole = false;
+
+                for ( String roleName : jwt.getGroups()) {
+                    if ( roleName.equals(role)) {
+                        hasRole = true;
+                    }
+                }
+
+                if ( hasRole ) {
+                    return Response.status(Response.Status.OK).entity(jwt).build();
+                }
+
+                resp.put("message", "No permission to access this resource");
+                resp.put("error", "unauthorized");
+                return Response.status(Response.Status.UNAUTHORIZED).entity(resp).build();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return Response.status(Response.Status.FORBIDDEN).entity(e).build();
+            }
+        }
+
+    }
+
+
+    /*
     @GET
     @Path("verify")
     @Produces(MediaType.APPLICATION_JSON)
@@ -98,4 +141,6 @@ public class GenerateToken {
             return Response.status(200).entity(e).build();
         }
     }
+
+     */
 }
